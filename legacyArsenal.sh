@@ -33,9 +33,9 @@ install_go() {
 set_go_env() {
     echo "Setting Go environment variables..."
     export GOPATH=$HOME/go
-    export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+    export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:/root/go/bin:/$HOME/go/bin
     echo "export GOPATH=$HOME/go" >> ~/.bashrc
-    echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin" >> ~/.bashrc
+    echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:/root/go/bin:/$HOME/go/bin" >> ~/.bashrc
     source ~/.bashrc
 }
 
