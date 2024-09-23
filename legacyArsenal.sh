@@ -24,9 +24,9 @@ install_packages() {
 # Function to add Go PPA and install Go
 install_go() {
     echo "Adding Go PPA and installing Go..."
-    add-apt-repository -y ppa:longsleep/golang-backports
-    apt update
-    apt install -y golang-go
+    sudo add-apt-repository ppa:longsleep/golang-backports
+    sudo apt update
+    sudo apt install golang-go
 }
 
 # Function to set Go environment variables
