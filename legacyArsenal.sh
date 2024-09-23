@@ -12,12 +12,12 @@ fi
 # Function to update and install necessary packages
 install_packages() {
     echo "Updating package list and upgrading installed packages..."
-    apt update && apt upgrade -y
+    apt update && apt upgrade -y && apt full-upgrade -y
 
     echo "Installing necessary packages..."
     apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev
     apt-get install -y python3-pip
-    apt-get install -y cargo
+    apt-get install -y cargo dotnet-host netstandard-targeting-pack-2.1 
     apt-get install -y sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto  massdns wpscan cargo dnsrecon jq
 
     sudo pip3 install pycurl bs4 pygeoip gobject cairocffi selenium
