@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -e  # Exit on error
 
 # Check if the script is run with root privileges
 if [ "$(id -u)" -ne "0" ]; then
@@ -11,22 +11,15 @@ fi
 # Function to update and install necessary packages
 install_packages() {
     echo "Updating package list and upgrading installed packages..."
-    apt update && apt upgrade -y && apt full-upgrade -y
+    apt update && apt upgrade -y
 
-    echo "Installing necessary packages..."
-    apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev
-    apt-get install -y cargo dotnet-host netstandard-targeting-pack-2.1 
-    apt-get install -y sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto massdns wpscan dnsrecon jq
-
-    pip3 install --upgrade   arjun wfuzz xsrfprobe dnsgen  
-}
-
-# Function to add Go PPA and install Go
-install_go() {
-    echo "Adding Go PPA and installing Go..."
-    sudo add-apt-repository ppa:longsleep/golang-backports
-    sudo apt update
-    sudo apt install golang-go
+    echo "Installing necessary packages from Kali repositories..."
+    apt-get install -y \
+        software-properties-common unzip wget make python3-pip build-essential git ruby-full \
+        python3 libpcap-dev cargo \
+        sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster \
+        nmap nikto massdns wpscan dnsrecon jq \
+        golang-go  # Install Go from Kali's repository
 }
 
 # Function to set Go environment variables
@@ -37,26 +30,26 @@ set_go_env() {
     echo "export GOPATH=$HOME/go" >> ~/.bashrc
     echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:/root/go/bin:/$HOME/go/bin" >> ~/.bashrc
     source ~/.bashrc
-}
+    }
 
 # Function to create tools directory and install pdtm
 install_pdtm() {
     echo "Creating tools directory..."
     mkdir -p ~/Desktop/tools
-    cd ~/Desktop/tools
+    cd ~/Desktop/tools || exit
     echo "Installing pdtm..."
     go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
     pdtm -ia
 }
 
-# Function to download, unzip, and move binaries
+# Function to download, unzip, and move binaries (for manually downloaded tools)
 install_tool() {
     local url=$1
     local filename=$(basename "$url")
     local binname=${filename%%_*}
 
     echo "Downloading $binname..."
-    wget -q "$url"
+    wget -q "$url" || { echo "Failed to download $binname"; return 1; }
 
     echo "Extracting $filename..."
     case "$filename" in
@@ -65,10 +58,10 @@ install_tool() {
     esac
 
     echo "Moving $binname to /usr/bin/"
-    mv "$binname" /usr/bin/ || { echo "Failed to move $binname"; exit 1; }
+    mv "$binname" /usr/bin/ || { echo "Failed to move $binname"; return 1; }
 }
 
-# Array of tools to install
+# Array of tools to install (if not available in Kali repo)
 declare -a tools=(
     "https://github.com/projectdiscovery/asnmap/releases/download/v1.0.4/asnmap_1.0.4_linux_amd64.zip"
     "https://github.com/projectdiscovery/mapcidr/releases/download/v1.1.2/mapcidr_1.1.2_linux_amd64.zip"
@@ -92,7 +85,7 @@ declare -a tools=(
 # Function to install all tools from the array
 install_tools() {
     for tool in "${tools[@]}"; do
-        install_tool "$tool"
+        install_tool "$tool" || { echo "Failed to install $tool"; }
     done
 }
 
@@ -100,38 +93,35 @@ install_tools() {
 install_python_tools() {
     echo "Cloning and installing Python-based tools..."
 
-    git clone https://github.com/guelfoweb/knock.git
-    cd knock
-    pip3 install -r requirements.txt
-    cd ..
+    declare -a python_tools=(
+        "https://github.com/guelfoweb/knock.git"
+        "https://github.com/blechschmidt/massdns.git"
+        "https://github.com/edoardottt/scilla.git"
+        "https://github.com/LukaSikic/subzy.git"
+        "https://github.com/GerbenJavado/LinkFinder.git"
+    )
 
-    git clone https://github.com/blechschmidt/massdns.git
-    cd massdns
-    make
-    cp bin/massdns /usr/bin/
-    cd ..
+    for repo in "${python_tools[@]}"; do
+        git clone "$repo" || { echo "Failed to clone $repo"; continue; }
+        cd "$(basename "$repo" .git)" || continue
 
-    git clone https://github.com/edoardottt/scilla.git
-    cd scilla
-    go get
-    make linux
-    cd ..
+        if [[ "$repo" == *"massdns.git"* ]]; then
+            make && cp bin/massdns /usr/bin/
+        elif [[ "$repo" == *"scilla.git"* ]]; then
+            go get && make linux
+        elif [[ "$repo" == *"subzy.git"* ]]; then
+            go build . && cp subzy /usr/bin/
+        elif [[ "$repo" == *"LinkFinder.git"* ]]; then
+            python3 setup.py install
+        fi
+
+        cd .. || exit
+    done
 
     pip3 install py-altdns==1.0.2 arjun
-
-    git clone https://github.com/LukaSikic/subzy.git
-    cd subzy
-    go build .
-    cp subzy /usr/bin/
-    cd ..
-
-    git clone https://github.com/GerbenJavado/LinkFinder.git
-    cd LinkFinder
-    python3 setup.py install
-    cd ..
 }
 
-# Function to install Go tools
+# Function to install Go tools using go install
 install_go_tools() {
     echo "Installing Go tools..."
     local go_tools=(
@@ -178,17 +168,15 @@ install_go_tools() {
     )
 
     for go_tool in "${go_tools[@]}"; do
-        go install "$go_tool"
+        go install "$go_tool" || { echo "Failed to install $go_tool"; }
     done
 }
 
 # Main execution
 install_packages
-install_go
 set_go_env
 install_pdtm
 install_tools
 install_python_tools
 install_go_tools
-
 echo "All tools have been installed successfully!"
