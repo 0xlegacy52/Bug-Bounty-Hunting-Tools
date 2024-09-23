@@ -18,7 +18,7 @@ install_packages() {
     apt-get install -y cargo dotnet-host netstandard-targeting-pack-2.1 
     apt-get install -y sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto massdns wpscan dnsrecon jq
 
-    pip3 install --upgrade pycurl bs4 pygeoip gobject cairocffi selenium arjun wfuzz xsrfprobe dnsgen festin updog truffleHog
+    pip3 install --upgrade pycurl bs4 pygeoip gobject cairocffi selenium arjun wfuzz xsrfprobe dnsgen festin updog truffleHog --break-system-packages
 }
 
 # Function to add Go PPA and install Go
