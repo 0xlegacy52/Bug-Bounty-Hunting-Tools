@@ -35,7 +35,7 @@ set_go_env() {
     echo "export GOPATH=$HOME/go" >> ~/.bashrc
     echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:/root/go/bin:/$HOME/go/bin" >> ~/.bashrc
     source ~/.bashrc
-    }
+}
 
 # Function to create tools directory and install pdtm
 install_pdtm() {
@@ -53,6 +53,12 @@ install_tool() {
     local filename=$(basename "$url")
     local binname=${filename%%_*}
 
+    echo "Checking if $binname is already installed..."
+    if command -v "$binname" &> /dev/null; then
+        echo "$binname is already installed. Skipping."
+        return 0
+    fi
+
     echo "Downloading $binname..."
     wget -q "$url" || { echo "Failed to download $binname"; return 1; }
 
@@ -60,6 +66,7 @@ install_tool() {
     case "$filename" in
         *.zip) unzip -q "$filename" ;;
         *.tgz | *.tar.gz) tar -xvzf "$filename" ;;
+        *) echo "Unsupported file type: $filename"; return 1 ;;
     esac
 
     echo "Moving $binname to /usr/bin/"
@@ -89,6 +96,7 @@ declare -a tools=(
 
 # Function to install all tools from the array
 install_tools() {
+    echo "Installing tools sequentially..."
     for tool in "${tools[@]}"; do
         install_tool "$tool" || { echo "Failed to install $tool"; }
     done
@@ -107,18 +115,20 @@ install_python_tools() {
     )
 
     for repo in "${python_tools[@]}"; do
-        git clone "$repo" || { echo "Failed to clone $repo"; continue; }
-        cd "$(basename "$repo" .git)" || continue
-
-        if [[ "$repo" == *"massdns.git"* ]]; then
-            make && cp bin/massdns /usr/bin/
-        elif [[ "$repo" == *"scilla.git"* ]]; then
-            go get && make linux
-        elif [[ "$repo" == *"subzy.git"* ]]; then
-            go build . && cp subzy /usr/bin/
-        elif [[ "$repo" == *"LinkFinder.git"* ]]; then
-            python3 setup.py install
+        repo_name=$(basename "$repo" .git)
+        if [ -d "$repo_name" ]; then
+            echo "$repo_name already exists, skipping..."
+            continue
         fi
+        git clone "$repo" || { echo "Failed to clone $repo"; continue; }
+        cd "$repo_name" || continue
+
+        case "$repo" in
+            *"massdns.git"*) make && cp bin/massdns /usr/bin/ ;;
+            *"scilla.git"*) go get && make linux ;;
+            *"subzy.git"*) go build . && cp subzy /usr/bin/ ;;
+            *"LinkFinder.git"*) python3 setup.py install ;;
+        esac
 
         cd .. || exit
     done
@@ -151,30 +161,19 @@ install_go_tools() {
         "github.com/edoardottt/csprecon/cmd/csprecon@latest"
         "github.com/Josue87/gotator@latest"
         "github.com/j3ssie/osmedeus@latest"
-        "github.com/projectdiscovery/shuffledns/cmd/shuffledns@latest"
         "github.com/utkusen/socialhunter@latest"
         "github.com/003random/getJS@latest"
         "github.com/tomnomnom/httprobe@latest"
-        "github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest"
-        "github.com/projectdiscovery/naabu/v2/cmd/naabu@latest"
         "github.com/c-sto/recursebuster@latest"
         "github.com/lc/gau/v2/cmd/gau@latest"
         "github.com/iamstoxe/urlgrab@latest"
         "github.com/mhmdiaa/second-order@latest"
-        "github.com/lc/cspparse@latest"
-        "github.com/shenwei356/rush/"
         "github.com/lc/subjs@latest"
         "github.com/projectdiscovery/shuffledns/cmd/shuffledns@latest"
-        "github.com/gwen001/virtual-host@latest"
-        "github.com/lc/gojex@latest"
-        "github.com/porthole-ascendancy/gtrt@latest"
-        "github.com/hahwul/scanify@latest"
         "github.com/s0md3v/Photon@latest"
     )
 
-    for go_tool in "${go_tools[@]}"; do
-        go install "$go_tool" || { echo "Failed to install $go_tool"; }
-    done
+    echo "${go_tools[@]}" | xargs -n 1 -P 4 go install || { echo "Failed to install one or more Go tools"; }
 }
 
 # Main execution
