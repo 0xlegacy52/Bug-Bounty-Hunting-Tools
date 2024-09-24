@@ -21,6 +21,11 @@ install_packages() {
         nmap nikto massdns wpscan dnsrecon jq \
         golang-go  # Install Go from Kali's repository
 }
+# Create a virtual environment
+python3 -m venv ~/my-venv
+
+# Activate the virtual environment
+source ~/my-venv/bin/activate
 
 # Function to set Go environment variables
 set_go_env() {
