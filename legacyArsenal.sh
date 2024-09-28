@@ -101,6 +101,7 @@ GO111MODULE=on go get -u -v github.com/projectdiscovery/subfinder/v2/cmd/subfind
 GO111MODULE=on go get -v github.com/projectdiscovery/chaos-client/cmd/chaos
 go get -u -v github.com/hahwul/dalfox
 go get -u -v github.com/lc/gau
+go get github.com/Emoe/kxss
 go install github.com/vodafon/waybackrobots@latest
 go get -u github.com/vodafon/waybackrobots
 GO111MODULE=on go get -u -v github.com/lc/subjs
