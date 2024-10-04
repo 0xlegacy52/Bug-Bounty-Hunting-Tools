@@ -26,8 +26,7 @@ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:/root/go/bin:/$HOME/go/bin
 echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:/root/go/bin:/$HOME/go/bin" >> ~/.bashrc
 source ~/.bashrc
 
-mkdir -p ~/Desktop/tools
-cd ~/Desktop/tools
+
 
 echo "Installing pdtm..."
 go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
