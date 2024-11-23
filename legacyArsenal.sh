@@ -31,6 +31,7 @@ apt install -y golang-go
 # Set environment variables for Go
 echo "export GOPATH=$HOME/go" >> ~/.zshrc
 echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:$HOME/go/bin:/root/go/bin" >> ~/.zshrc
+export PATH=\$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin:\$GOPATH/bin:$HOME/go/bin:/root/go/bin:/snap/bin
 source ~/.zshrc
 
 # Install pdtm
