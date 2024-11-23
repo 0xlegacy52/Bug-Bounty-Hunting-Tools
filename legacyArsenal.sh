@@ -16,7 +16,7 @@ apt update && apt upgrade -y && apt full-upgrade -y
 
 # Install necessary packages
 echo "Installing necessary packages..."
-apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo dotnet-host netstandard-targeting-pack-2.1 sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto massdns wpscan dnsrecon jq amass screen ruby  tmux wfuzz ripgrep sqlmap python3-shodan gem  python3.8-venv masscan npm 
+apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo dotnet-host netstandard-targeting-pack-2.1 sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto massdns wpscan dnsrecon jq amass screen ruby  tmux wfuzz ripgrep sqlmap python3-shodan gem   masscan npm 
 
 gem install wpscan
 
@@ -25,7 +25,6 @@ pip3 install arjun corscanner droopescan --break-system-packages
 
 # Add Go PPA and install Go
 echo "Adding Go PPA and installing Go..."
-add-apt-repository -y ppa:longsleep/golang-backports
 apt update
 apt install -y golang-go
 
