@@ -1,301 +1,424 @@
 #!/bin/bash
 
-# Check if the script is run with root privileges
-if [ "$(id -u)" -ne "0" ]; then
-    echo "This script must be run as root. Use 'sudo'."
-    exit 1
-fi
+sudo apt-get update -y && sudo apt-get dist-upgrade -y
+sudo apt install -y python3 python3-pip python3.12-venv
+sudo apt install -y cmake seclists
+sudo apt install -y pkg-config libssl-dev
+sudo rm -f /usr/bin/httpx && sudo apt remove httpx -y
+sudo apt-get install chromium python2 python2.7 gem jq python3 python3-pip unzip make gcc libpcap-dev curl build-essential libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev ruby libgmp-dev zlib1g-dev -y 
+sudo apt-get install nmap -y
+sudo apt-get install wfuzz -y 
+sudo apt-get install -y sqlmap 
+sudo apt-get install -y nikto 
+sudo gem install wpscan 
+sudo apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo
+sudo apt-get install -y ripgrep 
 
-# Create necessary directories
-mkdir -p /mnt/CyberSecurity/bugHunting/Tools  /mnt/CyberSecurity/bugHunting/templates /mnt/CyberSecurity/bugHunting/wordlist /mnt/CyberSecurity/bugHunting/gf
-cd /mnt/CyberSecurity/bugHunting/Tools
-
-# Update and upgrade installed packages
-echo "Updating package list and upgrading installed packages..."
-apt update && apt upgrade -y && apt full-upgrade -y
-
-# Install necessary packages
-echo "Installing necessary packages..."
-apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo dotnet-host netstandard-targeting-pack-2.1 sublist3r assetfinder altdns dirsearch feroxbuster ffuf gobuster dirb dirbuster nmap nikto massdns wpscan dnsrecon jq amass screen ruby  tmux wfuzz ripgrep sqlmap python3-shodan gem   masscan npm 
-
-gem install wpscan
-
-# Additional pip installations
-pip3 install arjun corscanner droopescan --break-system-packages
-
-# Add Go PPA and install Go
-echo "Adding Go PPA and installing Go..."
-apt update
-apt install -y golang-go
-
-# Set environment variables for Go
-echo "export GOPATH=$HOME/go" >> ~/.zshrc
-echo "export PATH=\$PATH:/usr/local/go/bin:\$GOPATH/bin:$HOME/go/bin:/root/go/bin" >> ~/.zshrc
-export PATH=\$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin:\$GOPATH/bin:$HOME/go/bin:/root/go/bin:/snap/bin
+wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin:/root/go/bin/' >> ~/.zshrc
+echo 'export PATH=$PATH:~/go/bin:/root/go/bin/' >> ~/.zshrc
 source ~/.zshrc
-
-# Install pdtm
-echo "Installing pdtm..."
-go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
-pdtm -ia
-
-export CENSYS_API_ID="apiId" && export CENSYS_API_SECRET="apisecret"
-# Install kiterunner
-echo "Installing kiterunner..."
-mkdir kiterunner
-cd kiterunner
+go version
+rm -rf go1.23.3.linux-amd64.tar.gz
+TOOLS_DIRECTORY="/opt/tools"
+mkdir -p "$TOOLS_DIRECTORY"
+cd "$TOOLS_DIRECTORY" 
+#git clone https://github.com/danielmiessler/SecLists.git
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+git clone https://github.com/ameenmaali/urldedupe.git
+cd urldedupe
+cmake CMakeLists.txt
+make
+sudo cp urldedupe /usr/local/bin/
+cd ..
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/s0md3v/Arjun.git
+python3 -m venv arjun-env
+source arjun-env/bin/activate
+cd Arjun
+pip3 install .
+cd ..
+sudo cp arjun-env/bin/arjun /usr/local/bin/
+deactivate
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/xnl-h4ck3r/waymore.git
+python3 -m venv waymore-env
+source waymore-env/bin/activate
+cd waymore
+pip3 install .
+pip3 install -r requirements.txt
+cd ..
+sudo cp waymore-env/bin/waymore /usr/local/bin/
+deactivate
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/aboul3la/Sublist3r.git
+python3 -m venv sublist3r-env
+source sublist3r-env/bin/activate
+cd Sublist3r
+pip3 install .
+pip3 install -r requirements.txt
+cd ..
+sudo cp sublist3r-env/bin/sublist3r /usr/local/bin/
+deactivate
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/maurosoria/dirsearch.git --depth 1
+python3 -m venv dirsearch-env
+source dirsearch-env/bin/activate
+cd dirsearch
+pip3 install .
+pip3 install -r requirements.txt
+cd ..
+sudo cp dirsearch-env/bin/dirsearch /usr/local/bin/
+deactivate
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/ahmedhamdy0x/subextreme.git
+cd subextreme
+rustup default stable
+cargo build --release
+sudo cp target/release/subextreme /usr/local/bin/
+subextreme -h
+cd ..
+cd "$TOOLS_DIRECTORY" 
+mkdir crawley && cd crawley
+wget https://github.com/s0rg/crawley/releases/download/v1.7.10/crawley_v1.7.10_linux_x86_64.tar.gz
+tar -xvzf crawley_v1.7.10_linux_x86_64.tar.gz
+sudo cp crawley /usr/local/bin/
+cd ..
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/ahmedhamdy0x/passurls.git
+python3 -m venv passurls-env
+source passurls-env/bin/activate
+cd passurls
+pip3 install .
+pip3 install -r requirements.txt
+cd ..
+sudo cp passurls-env/bin/passurls /usr/local/bin/
+deactivate
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/ahmedhamdy0x/VTsubs.git
+cd VTsubs
+cargo build --release
+cargo build
+sudo cp target/release/VTsubs /usr/local/bin/vtsubs
+sudo chmod +x /usr/local/bin/vtsubs
+cd ..
+cd "$TOOLS_DIRECTORY" 
 wget -q https://github.com/assetnote/kiterunner/releases/download/v1.0.2/kiterunner_1.0.2_linux_amd64.tar.gz
 tar -xvzf kiterunner_1.0.2_linux_amd64.tar.gz
-cp kr /usr/bin
+sudo mv kr /usr/local/bin
+rm -rf kiterunner_1.0.2_linux_amd64.tar.gz
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv linkfinder-env
+source linkfinder-env/bin/activate
+git clone https://github.com/GerbenJavado/LinkFinder.git
+cd LinkFinder
+pip3 install .
+pip3 install -r requirements.txt
+python setup.py install
+sudo cp linkfinder-env/bin/js-beautify /usr/local/bin
+deactivate
 cd ..
-mkdir findomain
-cd findomain
-curl -LO https://github.com/findomain/findomain/releases/latest/download/findomain-linux-i386.zip 
-unzip findomain-linux-i386.zip 
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv relateddomains-env
+source relateddomains-env/bin/activate
+git clone https://github.com/gwen001/related-domains
+cd related-domains
+pip3 install .
+pip3 install -r requirements.txt
+sudo cp related-domains.py /usr/local/bin
+deactivate
+cd ..
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/blechschmidt/massdns
+cd massdns
+make
+sudo cp bin/massdns /usr/local/bin
+cd ..
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv favfreak-env
+source favfreak-env/bin/activate
+git clone https://github.com/devanshbatham/FavFreak
+cd FavFreak
+pip3 install .
+pip3 install -r requirements.txt
+deactivate
+sudo cp favfreak.py /usr/local/bin
+cd ..
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv secretfinder-env
+source secretfinder-env/bin/activate
+git clone https://github.com/m4ll0k/SecretFinder
+cd SecretFinder
+pip3 install .
+pip3 install -r requirements.txt
+deactivate
+sudo cp SecretFinder.py /usr/local/bin
+cd ..
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv linkfinder-env
+source linkfinder-env/bin/activate
+git clone https://github.com/GerbenJavado/LinkFinder.git
+cd LinkFinder
+pip3 install .
+pip3 install -r requirements.txt
+python setup.py install
+sudo cp linkfinder-env/bin/js-beautify /usr/local/bin
+deactivate
+cd ..
+cd "$TOOLS_DIRECTORY" 
+python3 -m venv paramspider-env
+source paramspider-env/bin/activate
+git clone https://github.com/devanshbatham/ParamSpider
+cd ParamSpider
+pip3 install .
+pip3 install -r requirements.txt
+deactivate
+sudo cp paramspider-env/bin/paramspider /usr/local/bin
+cd ..
+cd "$TOOLS_DIRECTORY" 
+wget https://github.com/Edu4rdSHL/findomain/releases/latest/download/findomain-linux.zip 
+unzip findomain-linux.zip 
 chmod +x findomain 
-cp findomain /usr/bin/ 
-chmod  +x /usr/bin/findomain 
-cd ..
-wget https://github.com/guelfoweb/knock/archive/refs/tags/5.4.0.zip 
-unzip 5.4.0.zip 
-cd knock-5.4.0
-python3 setup.py install
-knockpy --set apikeyirustotal=apikey
-cd .. 
-
-wget https://github.com/s0md3v/uro/archive/refs/tags/1.0.0-beta.zip
-unzip 1.0.0-beta.zip  
-cd uro-1.0.0-beta 
+mv ./findomain /usr/local/bin/findomain 
+AMASSVER=$(curl -s https://api.github.com/repos/OWASP/Amass/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
+cd "$TOOLS_DIRECTORY"
+wget https://github.com/OWASP/Amass/releases/download/$AMASSVER/amass_linux_amd64.zip 
+unzip amass_linux_amd64.zip 
+mv amass_linux_amd64/amass /usr/local/bin/ 
+cd "$TOOLS_DIRECTORY" 
+curl -s https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py 
+python2 get-pip.py 
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/blechschmidt/massdns.git 
+cd massdns 
+make 
+ln -s "$TOOLS_DIRECTORY/massdns/bin/massdns" /usr/local/bin/ 
+cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/robertdavidgraham/masscan 
+cd masscan 
+make 
+make install 
+mv bin/masscan /usr/local/bin/ 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/xnl-h4ck3r/xnLinkFinder.git 
+cd xnLinkFinder 
 python3 setup.py install 
-cp -r  uro /usr/bin
-cd ..  
-
-git clone https://github.com/bp0lr/gauplus.git 
-cd gauplus 
-go build 
-mv gauplus /usr/local/bin/ 
-cd .. 
-
-mkdir x8
-cd x8
-wget https://github.com/mrco24/x8/raw/main/x8 
-chmod +x x8 
-mv x8 /usr/local/bin/x8
-cd ..
-
-mkdir nix
-cd nix
-curl -sL https://raw.githubusercontent.com/epi052/feroxbuster/master/install-nix.sh | bash
-cd ..
-
-mkdir unimap
-cd unimap
-wget -N -c https://github.com/Edu4rdSHL/unimap/releases/download/0.5.1/unimap-linux 
-mv unimap-linux /usr/local/bin/unimap 
-chmod 755 /usr/local/bin/unimap 
-strip -s /usr/local/bin/unimap
-cd ..
-
-git clone https://github.com/takshal/freq.git 
-cd freq 
-mv main.go freq.go 
-go build freq.go 
-cp freq /usr/bin
-cd ..  
-
-mkdir jaeles
-cd jaeles
-wget https://github.com/jaeles-project/jaeles/releases/download/beta0.17/jaeles0.17-linux.zip  
-unzip jaeles0.17-linux.zip  
-mv jaeles /usr/local/bin/
-cd ..
-
-
-
-# Clone and install tools from GitHub with a loop
-tools_to_install=(
-    "GerbenJavado/LinkFinder"
-    "gwen001/related-domains"
-    "devanshbatham/FavFreak"
-    "devanshbatham/ParamSpider"
-    "0ang3el/aem-hacker.git"
-    "americanexpress/earlybird.git"
-    "ozguralp/gmapsapiscanner"
-    "anshumanpattnaik/http-request-smuggling.git "
-    "codingo/Interlace.git"
-    "codingo/NoSQLMap.git"
-    "dark-warlord14/JSScanner"
-    "devanshbatham/paramspider"
-    "Ekultek/WhatWaf.git"
-    "epinna/tplmap.git"
-    "faiyazahmad07/xss_vibes.git"
-    "gokulapap/wappalyzer-cli"
-    "hisxo/gitGraber.git"
-    "m4ll0k/SecretFinder.git"
-    "obheda12/GitDorker.git"
-    "r0075h3ll/Oralyzer.git"
-    "r0oth3x49/ghauri.git"
-    "s0md3v/XSStrike"
-    "securing/DumpsterDiver.git"
-    "swisskyrepo/SSRFmap"
-    "tarunkant/Gopherus.git"
-    "tr0uble-mAker/POC-bomber.git"
-    "UnaPibaGeek/ctfr.git"
-    "s0md3v/Arjun.git"
-    "joda32/CertCrunchy.git"
-    "joda32/CertCrunchy.git"
-    "christophetd/censys-subdomain-finder.git"
-    
-    
-    
-    
-    
-    
-    
-)
-
-for tool in "${tools_to_install[@]}"; do
-    git clone https://github.com/"${tool}".git
-    tool_name=$(basename "$tool")
-    cd "$tool_name"
-    if [ -f requirements.txt ]; then
-        pip3 install -r requirements.txt --break-system-packages
-    fi
-    if [ -f setup.py ]; then
-        python3 setup.py install
-    fi
-    
-    if [ -f build.sh ];then
-    	./build.sh
-    fi
-    
-    if [ -f install.sh ];then
-    	chmod +x install.sh
-    	./install.sh
-    fi
-    
-    if [ -f setup.sh ];then
-    	./setup.sh
-    fi
-    
-    
-    cd ..
-done
-
-# Install additional Go tools
-go_tools=(
-	"github.com/003random/getJS"
-	"github.com/003random/getJS/v2"
-	"github.com/0xsha/GoLinkFinder"
-	"github.com/Emoe/kxss"
-	"github.com/Ice3man543/SubOver"
-	"github.com/Josue87/gotator"
-	"github.com/KathanP19/Gxss"
-	"github.com/LukaSikic/subzy"
-	"github.com/MrEmpy/mantra"
-	"github.com/OJ/gobuster/v3"
-	"github.com/bp0lr/gauplus"
-	"github.com/c-sto/recursebuster"
-	"github.com/c3l3si4n/quickcert@HEAD"
-	"github.com/cgboal/sonarsearch/cmd/crobat"
-	"github.com/channyein1337/jsleak"
-	"github.com/cheggaaa/pb/v3"
-	"github.com/d3mondev/puredns/v2"
-	"github.com/dwisiswant0/cf-check"
-	"github.com/dwisiswant0/crlfuzz/cmd/crlfuzz"
-	"github.com/dwisiswant0/galer"
-	"github.com/edoardottt/csprecon/cmd/csprecon"
-	"github.com/edoardottt/scilla/cmd/scilla"
-	"github.com/ethicalhackingplayground/bxss"
-	"github.com/ferreiraklet/Jeeves"
-	"github.com/ffuf/ffuf"
-	"github.com/ffuf/ffuf/v2"
-	"github.com/glebarez/cero"
-	"github.com/gwen001/github-subdomains"
-	"github.com/gwen001/google-search"
-	"github.com/haccer/subjack"
-	"github.com/hahwul/dalfox"
-	"github.com/hahwul/dalfox/v2"
-	"github.com/hakluke/hakcheckurl"
-	"github.com/hakluke/hakrawler"
-	"github.com/hakluke/hakrevdns"
-	"github.com/iamstoxe/urlgrab"
-	"github.com/j3ssie/osmedeus"
-	"github.com/jaeles-project/gospider"
-	"github.com/lc/cspparse"
-	"github.com/lc/gau"
-	"github.com/lc/gau/v2/cmd/gau"
-	"github.com/lc/subjs"
-	"github.com/lukasikic/subzy"
-	"github.com/mhmdiaa/second-order"
-	"github.com/mrco24/mrco24-error-sql"
-	"github.com/mrco24/mrco24-lfi"
-	"github.com/mrco24/open-redirect"
-	"github.com/mrco24/otx-url"
-	"github.com/mrco24/parameters"
-	"github.com/mrco24/time-sql"
-	"github.com/mrco24/tok"
-	"github.com/projectdiscovery/alterx/cmd/alterx"
-	"github.com/projectdiscovery/asnmap/cmd/asnmap"
-	"github.com/projectdiscovery/chaos-client/cmd/chaos"
-	"github.com/projectdiscovery/dnsprobe"
-	"github.com/projectdiscovery/dnsx/cmd/dnsx"
-	"github.com/projectdiscovery/httpx/cmd/httpx"
-	"github.com/projectdiscovery/interactsh/cmd/interactsh-client"
-	"github.com/projectdiscovery/katana/cmd/katana"
-	"github.com/projectdiscovery/mapcidr/cmd/mapcidr"
-	"github.com/projectdiscovery/naabu/v2/cmd/naabu"
-	"github.com/projectdiscovery/notify/cmd/notify"
-	"github.com/projectdiscovery/nuclei/v3/cmd/nuclei"
-	"github.com/projectdiscovery/shuffledns/cmd/shuffledns"
-	"github.com/projectdiscovery/subfinder/v2/cmd/subfinder"
-	"github.com/projectdiscovery/uncover/cmd/uncover"
-	"github.com/sensepost/gowitness"
-	"github.com/shenwei356/rush"
-	"github.com/tomnomnom/anew"
-	"github.com/tomnomnom/assetfinder"
-	"github.com/tomnomnom/fff"
-	"github.com/tomnomnom/gf"
-	"github.com/tomnomnom/gron"
-	"github.com/tomnomnom/hacks/anti-burl"
-	"github.com/tomnomnom/hacks/waybackurls"
-	"github.com/tomnomnom/httprobe"
-	"github.com/tomnomnom/meg"
-	"github.com/tomnomnom/qsreplace"
-	"github.com/tomnomnom/unfurl"
-	"github.com/tomnomnom/waybackurls"
-	"github.com/utkusen/socialhunter"
-	"github.com/vodafon/waybackrobots"
-	"github.com/xm1k3/cent"
-	"github.com/zan8in/afrog/v2/cmd/afrog"
-
-    
-)
-
-
-for tool in "${go_tools[@]}"; do
-    go install -v "$tool"@latest
-done
-
-# Source the updated .bashrc file
-source ~/.zshrc
-cd /mnt/CyberSecurity/bugHunting/templates
-git clone https://github.com/tomnomnom/gf
-git clone https://github.com/1ndianl33t/Gf-Patterns 
-wget https://raw.githubusercontent.com/mrco24/Patterns/main/my-lfi.json 
-
-git clone https://github.com/ghsec/ghsec-jaeles-signatures 
+cd "$TOOLS_DIRECTORY" 
+wget https://github.com/devploit/dontgo403/releases/download/0.5/dontgo403_linux_amd64 
+chmod +x dontgo403_linux_amd64 
+mv dontgo403_linux_amd64 /usr/local/bin/dontgo403 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/s0md3v/Corsy 
+python3 -m venv corsy-env
+source corsy-env/bin/activate
+cd Corsy 
+pip3 install requests 
+pip3 install corscanner 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/kleiton0x00/ppmap.git 
+cd ppmap 
+bash setup.sh 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/D35m0nd142/LFISuite.git 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/swisskyrepo/SSRFmap 
+python3 -m venv ssrf-env
+source ssrf-env/bin/activate
+cd SSRFmap 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/tarunkant/Gopherus.git 
+cd Gopherus
+chmod +x install.sh 
+./install.sh 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/Th0h0/autossrf.git
+python3 -m venv assrf-env
+source assrf-env/bin/activate
+cd autossrf 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/epinna/tplmap.git 
+python3 -m venv tplmap-env
+source tplmap-env/bin/activate
+cd tplmap 
+pip install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/s0md3v/XSStrike 
+python3 -m venv xsstrike-env
+source xsstrike-env/bin/activate
+cd XSStrike 
+pip3 install -r requirements.txt
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/codingo/NoSQLMap.git 
+cd NoSQLMap 
+python setup.py install 
+cd $TOOLS_DIRECTORY 
 git clone https://github.com/jaeles-project/jaeles-signatures.git 
-git clone https://github.com/projectdiscovery/fuzzing-templates.git 
-git clone https://github.com/projectdiscovery/nuclei-templates.git 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/0ang3el/aem-hacker.git 
+python3 -m venv aem-env
+source aem-env/bin/activate
+cd aem-hacker 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/six2dez/OneListForAll.git 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/obheda12/GitDorker.git 
+python3 -m venv gitdorker-env
+source gitdorker-env/bin/activate
+cd GitDorker 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/hisxo/gitGraber.git 
+python3 -m venv gitgraber-env
+source gitgraber-env/bin/activate
+cd gitGraber 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/internetwache/GitTools.git 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/securing/DumpsterDiver.git 
+python3 -m venv dumpsterdiver-env
+source dumpsterdiver-env/bin/activate
+cd DumpsterDiver 
+pip3 install -r requirements.txt 
+deactivate
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/americanexpress/earlybird.git 
+cd earlybird 
+./build.sh 
+./install.sh 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/codingo/Interlace.git 
+cd Interlace 
+python3 setup.py install 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/1ndianl33t/Gf-Patterns
+go install github.com/projectdiscovery/pdtm/cmd/pdtm@latest
+pdtm -ia
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install github.com/hahwul/dalfox/v2@latest
+go install github.com/vodafon/waybackrobots@latest
+go install -v github.com/projectdiscovery/notify/cmd/notify@latest
+go install github.com/edoardottt/csprecon/cmd/csprecon@latest
+go install github.com/shenwei356/rush@latest
+go install github.com/lc/gau/v2/cmd/gau@latest
+go install -v github.com/mhmdiaa/second-order@latest
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+go install github.com/tomnomnom/httprobe@latest
+go install github.com/utkusen/socialhunter@latest
+go install github.com/003random/getJS/v2@latest
+go install -v github.com/projectdiscovery/shuffledns/cmd/shuffledns@latest
+go install -v github.com/j3ssie/osmedeus@latest
+go install -v github.com/tomnomnom/assetfinder@latest
+go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install -v github.com/tomnomnom/hacks/filter-resolved@latest
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install -v github.com/tomnomnom/httprobe@latest
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+go install github.com/Ractiurd/jscracker@latest
+go install github.com/projectdiscovery/katana/cmd/katana@latest
+go install github.com/Josue87/gotator@latest
+go install github.com/hakluke/hakrawler@latest
+go install github.com/0xsha/GoLinkFinder@latest
+go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
+GO111MODULE=on go install github.com/dwisiswant0/crlfuzz/cmd/crlfuzz@latest
+go install github.com/tomnomnom/meg@latest
+go install github.com/tomnomnom/waybackurls@latest
+GO111MODULE=on go install github.com/jaeles-project/gospider@latest
+go install -v github.com/PentestPad/subzy@latest
+go install github.com/channyein1337/jsleak@latest
+go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+go install github.com/OJ/gobuster/v3@latest
+go install -v github.com/edoardottt/scilla/cmd/scilla@latest
+go install github.com/projectdiscovery/alterx/cmd/alterx@latest
+go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+go install -v github.com/tomnomnom/anew@latest
+go install github.com/projectdiscovery/asnmap/cmd/asnmap@latest
+go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
+go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install github.com/d3mondev/puredns/v2@latest
+go install -v github.com/owasp-amass/amass/v4/...@master
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install github.com/projectdiscovery/katana/cmd/katana@latest
+go install github.com/tomnomnom/waybackurls@latest
+go install github.com/hahwul/dalfox/v2@latest
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+GO111MODULE=on go get -u -v github.com/lc/subjs@latest
+go install github.com/gwen001/gitlab-subdomains@latest
+go install github.com/lc/subjs@latest 
+ln -s ~/go/bin/subjs /usr/local/bin/ 
+go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest 
+ln -s ~/go/bin/subfinder /usr/local/bin/ 
+go install github.com/tomnomnom/assetfinder@latest 
+ln -s ~/go/bin/assetfinder /usr/local/bin/ 
+go install github.com/gwen001/github-subdomains@latest 
+ln -s ~/go/bin/github-subdomains /usr/local/bin/ 
+go install github.com/gwen001/gitlab-subdomains@latest 
+ln -s ~/go/bin/gitlab-subdomains /usr/local/bin/ 
+go install github.com/cgboal/sonarsearch/cmd/crobat@latest 
+ln -s ~/go/bin/crobat /usr/local/bin/ 
+go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest 
+ln -s ~/go/bin/dnsx /usr/local/bin/ 
+go install github.com/d3mondev/puredns/v2@latest 
+ln -s ~/go/bin/puredns /usr/local/bin/ 
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+ln -s ~/go/bin/httpx /usr/local/bin/ 
+go install github.com/tomnomnom/httprobe@latest 
+ln -s ~/go/bin/httprobe /usr/local/bin/ 
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest 
+ln -s ~/go/bin/naabu /usr/local/bin/ 
+go install -v github.com/s0md3v/smap/cmd/smap@latest 
+ln -s ~/go/bin/smap /usr/local/bin/ 
+go install github.com/jaeles-project/gospider@latest 
+ln -s ~/go/bin/gospider /usr/local/bin/ 
+go install github.com/hakluke/hakrawler@latest 
+ln -s ~/go/bin/hakrawler /usr/local/bin/ 
+go install github.com/projectdiscovery/katana/cmd/katana@latest 
+ln -s ~/go/bin/katana /usr/local/bin/ 
+go install github.com/ffuf/ffuf@latest 
+ln -s ~/go/bin/ffuf /usr/local/bin/ 
+go install github.com/OJ/gobuster/v3@latest 
+ln -s ~/go/bin/gobuster /usr/local/bin/ 
+go install github.com/musana/fuzzuli@latest 
+ln -s ~/go/bin/fuzzuli /usr/local/bin/ 
+go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest 
+ln -s ~/go/bin/interactsh-client /usr/local/bin/ 
+go install github.com/hahwul/dalfox/v2@latest 
+ln -s ~/go/bin/dalfox /usr/local/bin/
+go install github.com/tomnomnom/hacks/kxss@latest 
+ln -s ~/go/bin/kxss /usr/local/bin/
+go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest 
+ln -s ~/go/bin/nuclei /usr/local/bin/ 
+nuclei -update-templates 
+GO111MODULE=on go install github.com/jaeles-project/jaeles@latest 
+ln -s ~/go/bin/jaeles /usr/local/bin/ 
+go install github.com/lc/gau/v2/cmd/gau@latest  
+ln -s ~/go/bin/gau /usr/local/bin/
+go install github.com/tomnomnom/hacks/anti-burl@latest  
+ln -s ~/go/bin/anti-burl /usr/local/bin/
+go install github.com/tomnomnom/unfurl@latest  
+ln -s ~/go/bin/unfurl /usr/local/bin/
+go install github.com/tomnomnom/anew@latest  
+ln -s ~/go/bin/anew /usr/local/bin/
+go install github.com/tomnomnom/gron@latest  
+ln -s ~/go/bin/gron /usr/local/bin/
+go install github.com/tomnomnom/qsreplace@latest  
+ln -s ~/go/bin/qsreplace /usr/local/bin/
 
-
-cd /mnt/CyberSecurity/bugHunting/wordlist
-git clone https://github.com/danielmiessler/SecLists.git 
-git clone https://github.com/mrco24/mrco24-wordlist.git 
-git clone https://github.com/orwagodfather/WordList.git  
-
-
-
-# Confirmation message
-echo "All tools have been installed successfully!"
+openssl x509 -inform DER -in ~/burp.der -out ~/burp-ca.crt
+sudo cp burp-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
