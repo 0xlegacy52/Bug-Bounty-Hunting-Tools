@@ -355,6 +355,7 @@ go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 go install github.com/projectdiscovery/katana/cmd/katana@latest
 go install github.com/tomnomnom/waybackurls@latest
+go install github.com/dhn/spk@latest
 go install github.com/hahwul/dalfox/v2@latest
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 GO111MODULE=on go get -u -v github.com/lc/subjs@latest
