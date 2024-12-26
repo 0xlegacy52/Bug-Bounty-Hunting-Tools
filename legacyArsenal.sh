@@ -53,6 +53,10 @@ cd ..
 sudo cp waymore-env/bin/waymore /usr/local/bin/
 deactivate
 cd "$TOOLS_DIRECTORY" 
+git clone https://github.com/Josue87/resolveDomains.git
+cd resolveDomains
+go build
+cd "$TOOLS_DIRECTORY" 
 git clone https://github.com/aboul3la/Sublist3r.git
 python3 -m venv sublist3r-env
 source sublist3r-env/bin/activate
