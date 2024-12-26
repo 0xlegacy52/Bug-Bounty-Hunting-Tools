@@ -363,6 +363,7 @@ go install github.com/tomnomnom/waybackurls@latest
 go install github.com/dhn/spk@latest
 go install github.com/hahwul/dalfox/v2@latest
 go install github.com/Josue87/resolveDomains@latest
+go install github.com/haccer/subjack@latest
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 GO111MODULE=on go get -u -v github.com/lc/subjs@latest
 go install github.com/gwen001/gitlab-subdomains@latest
