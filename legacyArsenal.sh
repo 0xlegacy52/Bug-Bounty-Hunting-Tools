@@ -331,6 +331,7 @@ go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 go install github.com/Ractiurd/jscracker@latest
 go install github.com/projectdiscovery/katana/cmd/katana@latest
 go install github.com/Josue87/gotator@latest
+go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
 go install github.com/hakluke/hakrawler@latest
 go install github.com/0xsha/GoLinkFinder@latest
 go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
