@@ -17,6 +17,7 @@ sudo gem install wpscan -y
 sudo apt install libpcap-dev -y
 sudo apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo
 sudo apt-get install -y ripgrep 
+pipx install git+https://github.com/RevoltSecurities/Subdominator
 
 wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
