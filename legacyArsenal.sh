@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Developed By Abdulrahman Muhammad Muhammad (AKA:0xlegacy)
+
+
 sudo apt-get update -y && sudo apt-get dist-upgrade -y
 sudo apt install -y python3 python3-pip python3.12-venv
 sudo apt install -y cmake seclists
@@ -10,7 +13,8 @@ sudo apt-get install nmap -y
 sudo apt-get install wfuzz -y 
 sudo apt-get install -y sqlmap 
 sudo apt-get install -y nikto 
-sudo gem install wpscan 
+sudo gem install wpscan -y
+sudo apt install libpcap-dev -y
 sudo apt-get install -y software-properties-common unzip wget make python3-pip build-essential git ruby-full python3 libpcap-dev cargo
 sudo apt-get install -y ripgrep 
 
@@ -299,10 +303,21 @@ cd DumpsterDiver
 pip3 install -r requirements.txt 
 deactivate
 cd $TOOLS_DIRECTORY 
+git clone https://github.com/Screetsec/TheFatRat.git
+cd TheFatRat
+chmod +x setup.sh && ./setup.sh
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/m3n0sd0n4ld/GooFuzz.git
+cd GooFuzz
+chmod +x GooFuzz
+./GooFuzz -h
+cd $TOOLS_DIRECTORY 
 git clone https://github.com/americanexpress/earlybird.git 
 cd earlybird 
 ./build.sh 
 ./install.sh 
+cd $TOOLS_DIRECTORY 
+git clone https://github.com/NeM0x00/BadGPT.git
 cd $TOOLS_DIRECTORY 
 git clone https://github.com/codingo/Interlace.git 
 cd Interlace 
@@ -355,6 +370,14 @@ go install github.com/projectdiscovery/asnmap/cmd/asnmap@latest
 go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 go install github.com/d3mondev/puredns/v2@latest
+go install github.com/tomnomnom/hacks/anti-burl@latest
+go install github.com/cgboal/sonarsearch/cmd/crobat@latest
+go install github.com/tomnomnom/httprobe@latest
+go install -v github.com/s0md3v/smap/cmd/smap@latest
+go install github.com/lc/subjs@latest
+go install github.com/musana/fuzzuli@latest
+go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+go install github.com/tomnomnom/gron@latest 
 go install -v github.com/owasp-amass/amass/v4/...@master
 go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
