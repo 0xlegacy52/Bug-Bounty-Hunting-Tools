@@ -11,6 +11,8 @@ sudo rm -f /usr/bin/httpx && sudo apt remove httpx -y
 sudo apt-get install chromium python2 python2.7 gem jq python3 python3-pip unzip make gcc libpcap-dev curl build-essential libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev ruby libgmp-dev zlib1g-dev -y 
 sudo apt-get install nmap -y
 sudo apt-get install wfuzz -y 
+pip install --break-system-packages git+https://github.com/RevoltSecurities/Dnsbruter.git
+
 sudo apt-get install -y sqlmap 
 sudo apt-get install -y nikto 
 sudo gem install wpscan -y
