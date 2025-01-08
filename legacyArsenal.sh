@@ -282,6 +282,8 @@ pip3 install -r requirements.txt
 deactivate
 cd $TOOLS_DIRECTORY 
 git clone https://github.com/six2dez/OneListForAll.git 
+git clone https://github.com/Nemesis0U/Subhunter.git
+go build subhunter.go
 cd $TOOLS_DIRECTORY 
 git clone https://github.com/obheda12/GitDorker.git 
 python3 -m venv gitdorker-env
